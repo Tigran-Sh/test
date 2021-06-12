@@ -1,0 +1,23 @@
+before_script:
+  - echo "Before script"
+  - cd /var
+  - ls
+  - cd /var/www/meeteam
+building:
+  stage: build
+  script:
+    - git pull origin master
+    - composer install
+    - php artisan migrate --seed
+    - php artisan cache:clear
+    - php artisan config:clear
+    - php artisan storage:link
+testing:
+  stage: test
+  script:
+    - php ./vendor/bin/phpunit
+deploying:
+  stage: deploy
+  script:
+    - echo "Deployed"
+    - php artisan queue:restart

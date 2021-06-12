@@ -1,0 +1,5 @@
+@include('dashboard.components.form._text', ['name' => 'first_name'])
+@include('dashboard.components.form._text', ['name' => 'last_name'])
+@include('dashboard.components.form._number', ['name' => 'phone'])
+@include('dashboard.components.form._email', ['name' => 'email'])
+@include('dashboard.components.form._password', ['name' => 'password'])

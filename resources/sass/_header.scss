@@ -1,0 +1,236 @@
+header {
+    border-bottom: 1px solid rgba(112, 112, 112, 0.14);
+    transition: .3s all;
+    &.fixed{
+        position: fixed;
+        left: 0;
+        right: 0;
+        width: 100%;
+        background: white;
+        top: 0;
+        z-index: 1;
+        transition: .3s all;
+    }
+}
+
+
+.meeteam-navbar.navbar {
+    max-width: 1123px;
+    margin: 0 auto;
+    padding: 9px 15px;
+
+    .navbar-collapse {
+        @media (max-width: 1199px) {
+            position: absolute;
+            top: 79px;
+            left: 0;
+            right: 0;
+            width: 100%;
+            padding: 30px 15px;
+            background: #ffffff;
+            z-index: 9;
+        }
+        @media (max-width: 575px) {
+            top: 56px;
+        }
+
+    }
+
+    .logo-light {
+        display: none;
+    }
+
+    .navbar-brand {
+        padding: 0;
+        margin-right: 82px;
+        &:lang(de){
+            margin-right: 35px;
+        }
+        @media (max-width: 575px) {
+            margin-right: 0;
+            img {
+                width: 45px;
+            }
+        }
+    }
+
+    .nav-link:not(.btn-yellow) {
+        border-radius: 15px;
+        background-color: $gray;
+        border: 0;
+        font-size: 14px;
+        font-family: $font-regular;
+        letter-spacing: 0.42px;
+        padding: 8px 20px;
+        margin-right: 18px;
+        color: #000;
+        @media (max-width: 1199px) {
+            margin: 0 auto 16px;
+        }
+    }
+
+    .btn-yellow {
+        padding: 12px 19px;
+        font-size: 14px;
+        border-radius: 20px;
+        margin-left: 6px;
+    }
+
+    .lang-notification {
+        margin-right: 2.6vw;
+        &:lang(de){
+            margin-right: 13px;
+        }
+        @media (max-width: 1400px) {
+            margin-right: 4.6vw;
+            &:lang(de){
+                margin-right: 13px;
+            }
+        }
+
+        .lang {
+            margin-left: 22px;
+        }
+    }
+}
+
+.navbar-dropdown {
+
+    .dropdown {
+        &-toggle {
+            &:after {
+                border-top: 1px solid;
+                border-right: 0;
+                border-bottom: 0;
+                border-left: 1px solid;
+                width: 6px;
+                height: 6px;
+                transform: rotate(-135deg);
+                margin-left: 7px;
+            }
+
+        }
+
+        &-menu {
+            backdrop-filter: blur(44px) brightness(-4%) opacity(17%);
+            border: 0;
+            border-radius: 30px;
+            top: 43px;
+            background-color: $gray;
+            padding: 13px 0;
+            overflow: hidden;
+            left: -18px;
+            right: 0;
+            margin: auto;
+            width: max-content;
+        }
+
+        &-item {
+            font-size: 14px;
+            font-family: $font-regular;
+            padding: 9px 22px;
+
+            &:hover {
+                color: black;
+            }
+
+            @media (max-width: 1199px) {
+                text-align: center;
+            }
+        }
+    }
+}
+
+/*burger*/
+
+#nav-icon {
+    width: 36px;
+    height: 17px;
+    transform: rotate(0);
+    cursor: pointer;
+    z-index: 1;
+    display: none;
+    border: none;
+    overflow: hidden;
+    border-radius: 0;
+    padding: 0;
+    @media (max-width: 1199px) {
+        display: block;
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+    span {
+        display: block;
+        position: absolute;
+        height: 2px;
+        width: 100%;
+        background: black;
+        border-radius: 0;
+        opacity: 1;
+        left: 0;
+        transform: rotate(0);
+
+        &:nth-child(1) {
+            top: 0;
+            width: 18px;
+            left: 14px;
+        }
+
+        &:nth-child(3),
+        &:nth-child(2) {
+            top: 7px;
+            width: 24px;
+            right: 0;
+            left: inherit;
+        }
+
+        &:nth-child(4) {
+            top: 14px;
+            margin-left: auto;
+            width: 18px;
+            left: 14px;
+        }
+    }
+
+    &[aria-expanded="true"] {
+        left: initial;
+        right: 46px;
+        top: 47px;
+
+        span {
+            height: 1px;
+        }
+
+        span {
+            &:nth-child(1) {
+                top: 2vw;
+                width: 0;
+                left: 50%;
+            }
+
+            &:nth-child(2) {
+                width: 19px;
+                transform: rotate(45deg);
+            }
+
+            &:nth-child(3) {
+                transform: rotate(-45deg);
+                width: 19px;
+            }
+
+            &:nth-child(4) {
+                top: 12vw;
+                width: 0;
+                left: 50%;
+            }
+        }
+
+    }
+}
+
+
+
