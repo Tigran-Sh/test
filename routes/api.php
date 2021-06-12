@@ -20,4 +20,3 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/reservation-hotels', [\App\Http\Controllers\BookingController::class, 'reservation'])->name('checkout.store');
 
-Route::get('choose-hotel/{id}', [\App\Http\Controllers\Api\BookingController::class, 'locations']);

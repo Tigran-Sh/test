@@ -20,10 +20,9 @@ class BookingController extends Controller
      */
     public function locations($id)
     {
-        $package = Package::with('hotel', 'hotel.services','hotel.images')->find($id);
+        $package = Package::with('hotel', 'hotel.services')->find($id);
         $hotel = $package->hotel;
         $services = $hotel->services;
-        $images = $hotel->images()->get();
         $hotel_ids = Package::where('package_type_id', $package->package_type_id)
             ->pluck('hotel_id')
             ->toArray();
@@ -32,7 +31,7 @@ class BookingController extends Controller
             ->where('id', '!=', $hotel->id)
             ->paginate(m_per_page());
 
-        return view('booking.locations', compact('hotel_ids', 'package', 'hotel', 'hotels', 'services','images'));
+        return view('booking.locations', compact('hotel_ids', 'package', 'hotel', 'hotels', 'services'));
     }
 
     /**
