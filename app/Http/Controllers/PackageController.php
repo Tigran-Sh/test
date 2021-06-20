@@ -22,15 +22,15 @@ class PackageController extends Controller
         $regions = Region::all();
         $packages = Package::with('hotel.meeting_rooms', 'hotel.price', 'data', 'hotel.destination', 'hotel')
             ->when($data['region_id'], function ($query) use ($data) {
-                return $query->whereHas('hotel.destination', function ($qr) use ($data) {
-                    return $qr->where('region_id', $data['region_id']);
+                $query->whereHas('hotel.destination', function ($qr) use ($data) {
+                    $qr->where('region_id', $data['region_id']);
                 });
             })->when(request()->get('count'), function ($query) use ($data) {
                 $query->whereHas('hotel', function ($qH) use ($data) {
                     $qH->where('guest_count', '>=', $data['count']);
                 });
             })->when(request()->get('type'), function ($query) {
-                return $query->where('package_type_id', request()->get('type'));
+                $query->where('package_type_id', request()->get('type'));
             })->latest()->paginate(m_per_page());
         $types = PackageType::with('data')->get();
         return view('packages.index', compact('packages', 'types', 'regions'));

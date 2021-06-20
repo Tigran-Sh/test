@@ -35,7 +35,8 @@ Route::group(
     Route::get('/extra_services', [App\Http\Controllers\ExtraServiceController::class, 'index'])->name('extra_services');
     Route::get('/extra_services/{id}', [App\Http\Controllers\ExtraServiceController::class, 'show'])->name('extra_service');
 
-    Route::get('/locations/{id}', [App\Http\Controllers\BookingController::class, 'locations'])->name('booking.locations');
+//    Route::get('/locations/{id}', [App\Http\Controllers\BookingController::class, 'locations'])->name('booking.locations');
+    Route::get('/reservation/{id}', [App\Http\Controllers\BookingController::class, 'reservation'])->name('booking.locations');
 
     Route::get('/extra-service-choose', [App\Http\Controllers\BookingController::class, 'extra_services'])->name('booking.extra_services');
 

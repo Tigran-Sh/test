@@ -17,7 +17,7 @@ class CreatePricesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('item_id');
             $table->string('item_type');
-            $table->double('price');
+            $table->double('price')->nullable();
             $table->double('d_price')->nullable();
             $table->double('system_price')->nullable();
             $table->double('system_d_price')->nullable();

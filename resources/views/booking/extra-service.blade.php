@@ -19,8 +19,7 @@
                 <div class="modal-body text-center pt-0">
                     <h4 class="title-h4">Please Choose date</h4>
                     <div class="choose-date">
-                        <img src="/img/dates.png" alt="" class="img-fluid">
-
+                        <div class="cal"></div>
                     </div>
                     <a href="#" class="btn-yellow">Submit</a>
                 </div>
@@ -457,4 +456,181 @@
 
 @endsection
 
+@section('scripts')
+    <script>
+        var cal = new Cal('.cal');
 
+        function Cal(el) {
+            let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            let weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            let today = new Date();
+            let calendar = {};
+            // accept HTMLElement or Selector
+            if (el instanceof HTMLElement) {
+                calendar.wrapper = el;
+            } else {
+                calendar.wrapper = document.querySelector(el);
+            }
+            if (!calendar.wrapper) {
+                console.log("Calendar Error: Invalid Selector or Element!");
+                return false;
+            }
+            calendar.wrapper.classList.add("calendar-wrapper");
+            /*   by Default the first day of the week is Monday  */
+            calendar.firstDayInTheWeek = 0;
+            calendar.date = today;
+            calendar.events = [];
+            calendar.specialClasses = [];
+            renderCalendar();
+            var cal = {
+                el: _ => calendar.wrapper,
+                refresh: _ => {
+                    calendar.builded = false;
+                    renderCalendar()
+                },
+                prevMonth: _ => goToMonth("prev"),
+                nextMonth: _ => goToMonth("next"),
+                setFirstDayInTheWeek: n => {
+                    if (isNaN(n) || n > 6 || n < 0) return;
+                    calendar.firstDayInTheWeek = n;
+                    calendar.builded = false;
+                    renderCalendar();
+                },
+                goToDate: goToDate
+            };
+
+            return cal;
+
+            function renderCalendar() {
+                if (calendar.builded == true) {
+                    updateMonthName();
+                    calendar.wrapper.removeChild(calendar.daysWrapper);
+                } else {
+                    calendar.wrapper.innerHTML = "";
+                    fillMonthName();
+                    fillDaysNames();
+                }
+                updateDays();
+                fillDays();
+            }
+
+            function goToDate(d) {
+                let dt = checkDate(d);
+                if (dt) {
+                    calendar.date = dt;
+                    renderCalendar();
+                }
+            }
+
+            function goToMonth(dir) {
+                let M = calendar.date.getMonth();
+                let d = dir == "next" ? M + 1 : dir == "prev" ? M - 1 : null;
+                if (d === null) return;
+                calendar.date = new Date(calendar.date.getFullYear(), d, 1);
+                renderCalendar();
+            }
+
+            function updateDays() {
+                let date = calendar.date;
+                let thisYear = date.getFullYear();
+                let thisMonth = date.getMonth();
+                let thisMonthLength = (new Date(thisYear, thisMonth + 1, 0)).getDate();
+                let lastMonthLength = (new Date(thisYear, thisMonth, 0)).getDate();
+                let firstDayInMonth = (new Date(thisYear, thisMonth, 1)).getDay();
+                if (firstDayInMonth - calendar.firstDayInTheWeek >= 0) {
+                    firstDayInMonth = firstDayInMonth - calendar.firstDayInTheWeek;
+                } else {
+                    firstDayInMonth = 7 + firstDayInMonth - calendar.firstDayInTheWeek;
+                }
+                let days = [];
+                // fill days from the previous month
+                for (let i = firstDayInMonth; i > 0; i--) {
+                    days.push({
+                        day: lastMonthLength - i + 1,
+                        month: thisMonth - 1 < 0 ? 11 : thisMonth - 1,
+                        year: thisMonth !== 0 ? thisYear : thisYear - 1,
+                        class: "prev-month"
+                    });
+                }
+                // fill current month days
+                for (let i = 1; i <= thisMonthLength; i++) {
+                    days.push({
+                        day: i,
+                        month: thisMonth,
+                        year: thisYear,
+                        class: "this-month"
+                    });
+                }
+                // fill days from the previous month
+                for (let i = 0; i < days.length % 7; i++) {
+                    days.push({
+                        day: i + 1,
+                        month: (thisMonth + 1) % 12,
+                        year: thisMonth !== 11 ? thisYear : thisYear + 1,
+                        class: "next-month"
+                    });
+                }
+                calendar.days = days;
+            }
+
+            function fillMonthName() {
+                let div = document.createElement("div");
+                div.classList.add("month-name-wrapper");
+                let btn_prev = document.createElement("button");
+                let btn_next = document.createElement("button");
+                btn_prev.innerText = "prev";
+                btn_prev.classList.add("btn-prev-month");
+                btn_next.classList.add("btn-next-month");
+                btn_next.innerText = "next";
+                div.appendChild(btn_prev);
+                div.appendChild(btn_next);
+                calendar.wrapper.appendChild(div);
+                btn_next.addEventListener("click", _ => goToMonth("next"));
+                btn_prev.addEventListener("click", _ => goToMonth("prev"));
+                calendar.builded = true;
+            }
+
+            function fillDaysNames() {
+                let div = document.createElement("div");
+                div.classList.add("days-names-wrapper");
+                let j = calendar.firstDayInTheWeek;
+                for (let i = 0; i < 7; i++) {
+                    let day = document.createElement("div");
+                    day.classList.add("day-name");
+                    day.innerHTML = weekDays[j];
+                    div.appendChild(day);
+                    if (j >= 6) {
+                        j = 0;
+                    } else {
+                        j++;
+                    }
+                }
+                calendar.daysNameWrapper = div;
+                calendar.wrapper.appendChild(div);
+            }
+
+            function fillDays() {
+                let div = document.createElement("div");
+                div.classList.add("days-wrapper");
+                for (let i = 0; i < calendar.days.length; i++) {
+                    let day = document.createElement("div");
+                    day.classList.add("day");
+                    day.setAttribute(
+                        "title",
+                        calendar.days[i].year + "-" + (calendar.days[i].month + 1) + "-" + calendar.days[i].day
+                    );
+                    day.innerHTML = calendar.days[i].day;
+                    day.classList.add(calendar.days[i].class);
+                    div.appendChild(day);
+                }
+                calendar.daysWrapper = div;
+                calendar.wrapper.appendChild(div);
+            }
+        }
+
+        $('.day.this-month').click(function () {
+            $(this).toggleClass('choosed-date')
+        })
+
+    </script>
+@endsection

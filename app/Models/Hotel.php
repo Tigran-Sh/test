@@ -25,6 +25,7 @@ class Hotel extends Model
      * @var string[]
      */
     protected $fillable = [
+        'id',
         'name',
         'destination_id',
         'longitude',

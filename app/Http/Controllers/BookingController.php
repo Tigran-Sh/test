@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ReservationRequest;
 use App\Models\Booking;
+use App\Models\ExtraService;
 use App\Models\Hotel;
 use App\Models\Package;
 use Illuminate\Contracts\Foundation\Application;
@@ -18,20 +19,27 @@ class BookingController extends Controller
      * @param $id
      * @return Application|Factory|View
      */
-    public function locations($id)
+    public function reservation($id)
     {
-        $package = Package::with('hotel', 'hotel.services')->find($id);
+        $package = Package::with('hotel', 'hotel.destination', 'hotel.data', 'hotel.price', 'hotel.services', 'hotel.images', 'hotel.services.data')
+            ->find($id);
         $hotel = $package->hotel;
         $services = $hotel->services;
         $hotel_ids = Package::where('package_type_id', $package->package_type_id)
             ->pluck('hotel_id')
             ->toArray();
-        $hotels = Hotel::with('services', 'images')
+        $hotels = Hotel::with('services', 'images','data','price','services.data')
             ->whereIn('id', $hotel_ids)
             ->where('id', '!=', $hotel->id)
             ->paginate(m_per_page());
+        $hotelsForExtraServices = Hotel::with('services', 'images','data')
+            ->whereIn('id', $hotel_ids)
+            ->paginate(m_per_page());
+        $extraServices = ExtraService::with('destination', 'data','images')
+            ->whereIn('destination_id', $hotel_ids)
+            ->get();
 
-        return view('booking.locations', compact('hotel_ids', 'package', 'hotel', 'hotels', 'services'));
+        return view('booking.reservation', compact('hotel_ids', 'package', 'hotel', 'hotels', 'services', 'extraServices','hotelsForExtraServices'));
     }
 
     /**
@@ -66,18 +74,18 @@ class BookingController extends Controller
         return view('booking.pick-dates');
     }
 
-    /**
-     * Package Reservation
-     *
-     * @param ReservationRequest $request
-     * @return JsonResponse
-     */
-    public function reservation(ReservationRequest $request): JsonResponse
-    {
-        $data = $request->validated();
-        $data['reservation_number'] = generate_random_string();
-        Booking::create($data);
-
-        return response()->json(1, Response::HTTP_OK);
-    }
+//    /**
+//     * Package Reservation
+//     *
+//     * @param ReservationRequest $request
+//     * @return JsonResponse
+//     */
+//    public function reservation(ReservationRequest $request): JsonResponse
+//    {
+//        $data = $request->validated();
+//        $data['reservation_number'] = generate_random_string();
+//        Booking::create($data);
+//
+//        return response()->json(1, Response::HTTP_OK);
+//    }
 }

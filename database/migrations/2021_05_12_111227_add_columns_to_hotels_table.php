@@ -14,9 +14,9 @@ class AddColumnsToHotelsTable extends Migration
     public function up()
     {
         Schema::table('hotels', function (Blueprint $table) {
-            $table->smallInteger('available_single_rooms')->unsigned()->after('max_room');
-            $table->smallInteger('available_double_rooms')->unsigned()->after('available_single_rooms');
-            $table->smallInteger('guest_count')->unsigned()->after('available_double_rooms');
+            $table->smallInteger('available_single_rooms')->unsigned()->nullable()->after('max_room');
+            $table->smallInteger('available_double_rooms')->unsigned()->nullable()->after('available_single_rooms');
+            $table->smallInteger('guest_count')->unsigned()->nullable()->after('available_double_rooms');
         });
     }
 

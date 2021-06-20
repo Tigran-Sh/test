@@ -8,7 +8,7 @@
             <form action="{{route('packages')}}" method="GET" class="d-flex home-header-form align-items-center">
                 <div class="region">
                     <select name="region_id">
-                        <option value="">{{__('Region')}}</option>
+                        <option selected="true" disabled="disabled">{{__('Region')}}</option>
                         @foreach($regions as $region)
                             <option value="{{$region->id}}">{{$region->name}}</option>
                         @endforeach

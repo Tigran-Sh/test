@@ -34,7 +34,13 @@ class DataService
                     $dataToFind[$key] = $localeCode;
                 } else {
                     $requestDataKey = $key . '_' . $localeCode;
-                    $data[$key] = $requestData[$requestDataKey];
+                    if (!empty($data)) {
+                        try {
+                            $data[$key] = $requestData[$requestDataKey];
+                        } catch (\Throwable $exception) {
+                            dd($exception->getMessage());
+                        }
+                    }
                 }
             }
             $dataObject::updateOrCreate($dataToFind, $data);

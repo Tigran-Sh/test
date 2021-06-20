@@ -18,5 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/reservation-hotels', [\App\Http\Controllers\BookingController::class, 'reservation'])->name('checkout.store');
-
+//Route::post('/reservation-hotels', [\App\Http\Controllers\BookingController::class, 'reservation'])->name('checkout.store');
+Route::get('/get-extra-service-data/{id}',[\App\Http\Controllers\Api\ReservationController::class,'getExtraServiceData']);
