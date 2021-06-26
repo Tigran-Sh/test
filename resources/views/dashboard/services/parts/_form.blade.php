@@ -5,7 +5,7 @@
 @include('dashboard.components.form._text', ['name' => 'address'])
 @include('dashboard.components.form._text', ['name' => 'longitude'])
 @include('dashboard.components.form._text', ['name' => 'latitude'])
-
+@include('dashboard.components.form._file_multiple', ['name' => 'images', 'object' => $service ?? null])
 
 <ul class="nav nav-tabs nav-tabs-top">
     @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)

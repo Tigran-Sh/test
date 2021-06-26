@@ -11,6 +11,7 @@
         {{--            :hotel_ids="{{ $hotel_ids }}"--}}
         {{--            :package="{{ $package }}"--}}
         :hotel="{{ $hotel }}"
+        :service_images="{{ $service_images }}"
         :hotels="{{ json_encode($hotels) }}"
         :extra_services="{{ $extraServices }}"
         :hotel_for_extra_services="{{ json_encode($hotelsForExtraServices) }}"

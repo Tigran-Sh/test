@@ -53,7 +53,8 @@
             <div class="card-body">
                 {!! Form::model($service, [
                         'method' => 'PATCH',
-                        'route' => [ "services.update", $service->id]
+                        'route' => [ "services.update", $service->id],
+                        'files' => true
                      ]) !!}
                 @include('dashboard.services.parts._form')
                 <div class="text-right">

@@ -684,8 +684,12 @@
                     </div>
                 </div>
                 <div class="text-right pb-5">
-                    <a href="#" class="btn-yellow dark">Skip</a>
-                    <a href="#" class="btn-yellow">Next</a>
+                    <button @click="$emit('nextPage', 5)" class="btn-yellow dark" data-toggle="modal"
+                            data-target="#errorModal">Skip
+                    </button>
+                    <button @click="$emit('nextPage', 5)" class="btn-yellow" data-toggle="modal"
+                            data-target="#errorModal">Next
+                    </button>
                 </div>
             </div>
         </section>

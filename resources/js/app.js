@@ -22,6 +22,14 @@ window.Vue = require('vue').default;
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
+import { CoolSelectPlugin } from 'vue-cool-select'
+
+// paste the line below only if you need "bootstrap" theme
+import 'vue-cool-select/dist/themes/bootstrap.css'
+// paste the line below only if you need "material-design" theme
+import 'vue-cool-select/dist/themes/material-design.css'
+// you can also import your theme
+
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
@@ -31,6 +39,8 @@ window.Vue = require('vue').default;
 Vue.component('reservation-component', require('./service/ReservationComponent').default)
 Vue.use(VueLoaders);
 Vue.use(VModal)
+Vue.use(CoolSelectPlugin)
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

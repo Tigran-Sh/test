@@ -1,6 +1,6 @@
 @include('dashboard.components.form._text', ['name' => 'name'])
 @include('dashboard.components.form._tags',['name' => 'attributes', 'attributes' => $extra_service->attributes ?? null])
-@include('dashboard.components.form._select', ['name' => 'extra_service_type_id', 'data' => $types])
+@include('dashboard.components.form._select', ['name' => 'extra_service_type_ids', 'label' => 'barev', 'data' => $types, 'multiple' => true, 'select_2' => true, 'selected' => $extra_service_types ?? null])
 @include('dashboard.components.form._select', ['name' => 'user_id', 'data' => $contacts])
 @include('dashboard.components.form._select', ['name' => 'destination_id', 'data' => $destinations])
 @include('dashboard.components.form._number', ['name' => 'duration'])

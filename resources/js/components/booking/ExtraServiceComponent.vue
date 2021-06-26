@@ -110,7 +110,13 @@
                                 {{ item.data.payment_conditions }}
                             </div>
                             <div class="text-right mt-auto">
-                                <a href="#" class="btn-yellow btn-yellow-outline mt-0"> Choose</a>
+                                <img v-if="choosedExtraServices.includes(item.id)" @click="chooseExtraService(item.id)"
+                                     src="/img/selected.svg" alt="">
+
+                                <button v-if="!choosedExtraServices.includes(item.id)" @click="chooseExtraService(item.id)"
+                                        class="btn-yellow btn-yellow-outline mt-0">
+                                    Choose
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -246,6 +252,7 @@ export default {
             tabs: {},
             tabValue: '',
             extraServicesData: [],
+            choosedExtraServices: []
         }
     },
     created() {
@@ -255,6 +262,16 @@ export default {
         getTab(item) {
             this.tabs = item
         },
+        chooseExtraService: function(id){
+            if(!this.choosedExtraServices.includes(id)){
+                this.choosedExtraServices.push(id);
+            }else{
+                this.choosedExtraServices.splice(this.choosedExtraServices.indexOf(id), 1);
+            }
+
+            this.$emit('choosedExtraServices', this.choosedExtraServices);
+        },
+
         changeTab(value) {
             this.extraServicesData = [];
             axios

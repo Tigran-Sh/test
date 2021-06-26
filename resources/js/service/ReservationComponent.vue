@@ -45,23 +45,32 @@
                 :hotel="hotel"
                 :hotels="hotels"
                 :booking="booking"
+                :service_images="service_images"
                 @hotel_id="chooseHotels"
                 v-if="current_step === 2"
+                @bookingHotelId="bookingHotelId"
                 @hotel_service_id="chooseHotelServices"
                 @nextPage="nextPage"
             ></hotels-component>
             <extra-service-component
-                                    v-if="current_step === 3"
-                                     :extraServices="extra_services"
-                                     :booking="booking"
-                                     :hotel="hotel"
-                                     :hotels="hotels"
-                                     :hotel_for_extra_services="hotel_for_extra_services"
-                                     @previousPage="previousPage"
-                                     @nextPage="nextPage"
+                v-if="current_step === 3"
+                :extraServices="extra_services"
+                :booking="booking"
+                :hotel="hotel"
+                :hotels="hotels"
+                :hotel_for_extra_services="hotel_for_extra_services"
+                @previousPage="previousPage"
+                @choosedExtraServices="choosedExtraServices"
+                @nextPage="nextPage"
             ></extra-service-component>
-            <transfer-component v-if="current_step === 4"></transfer-component>
-            <div v-if="current_step === 5">2dsafdsa</div>
+            <transfer-component
+                v-if="current_step === 4"
+                :extra_services="extra_services"
+                @nextPage="nextPage"
+            ></transfer-component>
+            <check-out-component v-if="current_step === 5"
+                                 :booking="booking"
+            ></check-out-component>
         </section>
 
     </div>
@@ -72,12 +81,12 @@
 import HotelsComponent from "../components/booking/HotelsComponent";
 import ExtraServiceComponent from "../components/booking/ExtraServiceComponent";
 import TransferComponent from "../components/booking/TransferComponent";
+import CheckOutComponent from "../components/booking/CheckOutComponent";
 
 export default {
     name: "ReservationComponent",
-    components: {TransferComponent, ExtraServiceComponent, HotelsComponent},
+    components: {CheckOutComponent, TransferComponent, ExtraServiceComponent, HotelsComponent},
     created() {
-        // console.log(this.hotels_extra_services)
     },
     data() {
         return {
@@ -85,6 +94,7 @@ export default {
                 reservation_data: {
                     hotels: [],
                     hotel_services: [],
+                    extra_services: []
                 }
             },
             steps: [
@@ -117,7 +127,7 @@ export default {
             current_step: 2
         }
     },
-    props: ['hotel', 'hotels', 'extra_services', 'hotel_for_extra_services'],
+    props: ['hotel', 'hotels', 'extra_services', 'hotel_for_extra_services', 'service_images'],
     methods: {
         nextPage(page) {
             console.log(page, 'next')
@@ -126,6 +136,10 @@ export default {
         previousPage(page) {
             console.log(page)
             this.current_step = page
+        },
+        choosedExtraServices(choosedExtraServices){
+            console.log(choosedExtraServices,'choosedExtraServices');
+            this.extra_services = choosedExtraServices;
         },
         chooseHotels(hotel_id) {
             console.log(hotel_id)
@@ -158,7 +172,10 @@ export default {
                 }
             }
             this.$refs.hotel.getHotelServices(this.booking);
-        }
+        },
+        bookingHotelId: function(bookingHotelId){
+            this.booking.reservation_data.hotels = bookingHotelId
+        },
     },
 }
 $('.hotel-slider').slick({

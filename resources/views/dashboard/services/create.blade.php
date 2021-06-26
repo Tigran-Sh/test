@@ -23,10 +23,11 @@
                 </div>
             </div>
             <div class="card-body">
-                {!! Form::open(['route' => "services.store"]) !!}
+                {!! Form::open(['route' => "services.store",'files' => true]) !!}
                 @include('dashboard.services.parts._form')
                 <div class="text-right">
-                    <button type="submit" class="btn btn-primary legitRipple">{{__('Add')}}<i class="icon-floppy-disk ml-2"></i></button>
+                    <button type="submit" class="btn btn-primary legitRipple">{{__('Add')}}<i
+                            class="icon-floppy-disk ml-2"></i></button>
                 </div>
                 {!! Form::close() !!}
             </div>

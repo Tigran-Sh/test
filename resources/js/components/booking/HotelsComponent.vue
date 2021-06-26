@@ -5,10 +5,10 @@
                 <div class="modal-body">
                     <h5 class="text-center mb-5">Package Information</h5>
                     <div class="sidebar-info border-bottom-0">
-                            <h6 class="title"><img src="/img/close.svg" alt="close" class="mr-2" width="18">Hotel</h6>
+                        <h6 class="title"><img src="/img/close.svg" alt="close" class="mr-2" width="18">Hotel</h6>
                         <div class="d-flex align-items-start sidebar-info-div">
                             <span>Name</span>
-                            <span>{{modalData.name}}</span>
+                            <span>{{ modalData.name }}</span>
                         </div>
                         <div class="d-flex align-items-start sidebar-info-div">
                             <span>Stars</span>
@@ -18,12 +18,38 @@
                         </div>
                         <div class="d-flex align-items-start sidebar-info-div">
                             <span>Location</span>
-                            <span>{{ modalData.name}}</span>
+                            <span>{{ modalData.name }}</span>
                         </div>
-
                     </div>
                 </div>
-
+            </div>
+        </modal>
+        <modal name="replace-choosed-hotel">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h2 class="text-center mb-5">Replace</h2>
+                    <cool-select
+                        v-model="selected"
+                        :items="allChoosed"
+                        item-value="id"
+                        item-text="name"
+                        placeholder="Select Hotels "
+                    />
+                </div>
+                <div class="modal-footer">
+                    <button @click="replaceSelceted" class="btn-yellow">ok</button>
+                </div>
+            </div>
+        </modal>
+        <modal name="warning-select">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h2 class="text-center mb-5">You can choose second hotel</h2>
+                </div>
+                <div class="modal-footer">
+                    <button @click="$modal.hide('warning-select')" class="btn-yellow">choose</button>
+                    <button @click="$emit('nextPage', 3)" class="btn-yellow">next</button>
+                </div>
             </div>
         </modal>
 
@@ -132,10 +158,12 @@
                                          v-html="service.data.details"
                                     />
                                     <div class="text-right mt-auto">
-                                        <img v-if="bookingId.includes(service.id)" @click="$emit('hotel_service_id', service.id)"
+                                        <img v-if="bookingId.includes(service.id)"
+                                             @click="$emit('hotel_service_id', service.id)"
                                              src="/img/selected.svg" alt="">
 
-                                        <button v-if="!bookingId.includes(service.id)" @click="$emit('hotel_service_id', service.id)"
+                                        <button v-if="!bookingId.includes(service.id)"
+                                                @click="$emit('hotel_service_id', service.id)"
                                                 class="btn-yellow mt-0">
                                             Choose
                                         </button>
@@ -173,15 +201,16 @@
                                     <img v-if="bookingHotelId.includes(hotel.id)" @click="$emit('hotel_id', hotel.id)"
                                          src="/img/selected.svg" alt="">
 
-                                    <button v-if="!bookingHotelId.includes(hotel.id)" @click="$emit('hotel_id', hotel.id)"
+                                    <button v-if="!bookingHotelId.includes(hotel.id)"
+                                            @click="$emit('hotel_id', hotel.id)"
                                             class="btn-yellow mt-0">
                                         Choose
                                     </button>
-<!--                                    <img v-if="secondHotel === hotel.id" @click="chooseSecondHotel(hotel.id, false)"-->
-<!--                                         src="/img/selected.svg" alt="">-->
-<!--                                    <button v-if="secondHotel !== hotel.id" @click="chooseSecondHotel(hotel.id, true)"-->
-<!--                                            class="btn-yellow text-dark">Choose Hotel-->
-<!--                                    </button>-->
+                                    <!--                                    <img v-if="secondHotel === hotel.id" @click="chooseSecondHotel(hotel.id, false)"-->
+                                    <!--                                         src="/img/selected.svg" alt="">-->
+                                    <!--                                    <button v-if="secondHotel !== hotel.id" @click="chooseSecondHotel(hotel.id, true)"-->
+                                    <!--                                            class="btn-yellow text-dark">Choose Hotel-->
+                                    <!--                                    </button>-->
                                 </div>
                             </div>
                         </div>
@@ -200,10 +229,12 @@
                                         />
                                         <div class="text-right mt-auto">
 
-                                            <img v-if="bookingId.includes(service.id)" @click="$emit('hotel_service_id', service.id)"
+                                            <img v-if="bookingId.includes(service.id)"
+                                                 @click="$emit('hotel_service_id', service.id)"
                                                  src="/img/selected.svg" alt="">
 
-                                            <button v-if="!bookingId.includes(service.id)" @click="$emit('hotel_service_id', service.id)"
+                                            <button v-if="!bookingId.includes(service.id)"
+                                                    @click="$emit('hotel_service_id', service.id)"
                                                     class="btn-yellow mt-0">
                                                 Choose
                                             </button>
@@ -217,7 +248,7 @@
 
                     <div class="d-flex flex-wrap justify-content-between mt-5 w-100 mb-sm-0 mb-4">
                         <a href="#" class="text-dark">See more</a>
-                        <button @click="$emit('nextPage', 3)" class="btn-yellow" data-toggle="modal"
+                        <button @click="nextPage" class="btn-yellow" data-toggle="modal"
                                 data-target="#errorModal">Next
                         </button>
                     </div>
@@ -233,10 +264,11 @@
 </template>
 
 <script>
+import {CoolSelect} from 'vue-cool-select'
 
 export default {
     name: "HotelsComponent",
-    props: ['hotel', 'hotels'],
+    props: ['hotel', 'hotels', 'service_images'],
     data() {
         return {
             choosedHotel: false,
@@ -247,65 +279,85 @@ export default {
             hotelId: '',
             modalData: [],
             bookingId: [],
-            bookingHotelId: []
+            bookingHotelId: [],
+            replaceId: '',
+            selected: '',
+            allChoosed: []
         }
     },
+    components: {CoolSelect},
+
     created() {
-        // console.log(this.hotel)
     },
     methods: {
         seeDetails(services, id) {
-            // console.log(services, 'hotels')
             this.hotelId = id;
-            // id ? this.hidden = false : this.hidden = true
             this.hidden = !id;
-            console.log(this.hidden, 'hedden');
             this.another_service = services
         },
+
         showHotelModal: function (modalData) {
-            // console.log(modalData, 'modal data');
             this.modalData = modalData;
             this.$modal.show('my-first-modal');
         },
 
-        chooseHotel: function (id, action) {
-            this.choosedHotel = action
-            this.hotel_ids.push(id)
-            this.$emit('hotel_id', this.hotel_ids)
-            this.hotel_ids = []
+        nextPage: function () {
+            if (this.bookingHotelId.length < 2) {
+                this.$modal.show('warning-select');
+            } else {
+                this.$emit('nextPage', 3);
+            }
         },
 
-        getHotel: function (hotel){
-            this.bookingHotelId = hotel.reservation_data.hotels
+        getHotel: function (hotel) {
+            this.bookingHotelId = hotel.reservation_data.hotels;
+            if (this.bookingHotelId.length > 2) {
+                this.replaceId = this.bookingHotelId.pop();
+                console.log(this.replaceId, 'ena vory poxum em')
+                console.log(this.bookingHotelId, 'bolory baci chyntrvacic')
+
+                this.hotels.data.map(hotel => {
+                    if (this.bookingHotelId.includes(hotel.id)) {
+                        this.allChoosed.push({
+                            'id': hotel.id,
+                            'name': hotel.name
+                        })
+                    }
+                });
+                if (this.bookingHotelId.includes(this.hotel.id)) {
+                    this.allChoosed.push({
+                        'id': this.hotel.id,
+                        'name': this.hotel.name
+                    })
+                }
+
+                this.$modal.show('replace-choosed-hotel');
+            }
         },
 
-        getHotelServices: function (hotelServices){
+        replaceSelceted: function () {
+            console.log(this.allChoosed, 'allChoosed')
+            this.allChoosed = this.allChoosed.map(item => {
+                return item.id
+            });
+
+            let index = this.allChoosed.indexOf(this.selected);
+
+            if (index !== -1) {
+                this.allChoosed[index] = this.replaceId;
+            }
+
+            this.bookingHotelId = this.allChoosed;
+
+            this.$modal.hide('replace-choosed-hotel');
+
+            this.$emit('bookingHotelId', this.bookingHotelId);
+            console.log(this.bookingHotelId, 'this.bookingHotelId[index]')
+        },
+
+        getHotelServices: function (hotelServices) {
             this.bookingId = hotelServices.reservation_data.hotel_services
         },
-        chooseSecondHotel: function (id, action) {
-
-            this.choosedHotel = action
-            this.secondHotel = id
-            this.hotel_ids.push(id)
-            this.$emit('hotel_id', this.hotel_ids)
-            this.hotel_ids = []
-            // this.$emit('hotel_id', id)
-            // this.secondHotel = id
-            // if (this.hotel_ids.length > 0) {
-            //     if (!this.hotel_ids.includes(id)) {
-            //         this.hotel_ids = []
-            //         this.hotel_ids.push(id)
-            //     } else {
-            //         this.hotel_ids = []
-            //     }
-            // } else {
-            //     this.hotel_ids.push(id)
-            // }
-
-            // console.log(this.hotel_ids,'secondary')
-            // this.$emit('hotel_id', this.hotel_ids)
-
-        }
     }
 }
 </script>
